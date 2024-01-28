@@ -23,7 +23,7 @@
 package dev.galacticraft.mod.screen;
 
 import dev.galacticraft.mod.content.GCBlockEntityTypes;
-import dev.galacticraft.mod.content.block.special.ParaChestBlockEntity;
+import dev.galacticraft.mod.content.block.special.ParachestBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -32,13 +32,13 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 public class ParachestMenu extends AbstractContainerMenu {
-    private final ParaChestBlockEntity blockEntity;
+    private final ParachestBlockEntity blockEntity;
 
     public ParachestMenu(int syncId, Inventory playerInventory, FriendlyByteBuf buf) {
         this(syncId, playerInventory, GCBlockEntityTypes.PARACHEST.getBlockEntity(playerInventory.player.level(), buf.readBlockPos()));
     }
 
-    public ParachestMenu(int syncId, Inventory playerInventory, ParaChestBlockEntity blockEntity) {
+    public ParachestMenu(int syncId, Inventory playerInventory, ParachestBlockEntity blockEntity) {
         super(GCMenuTypes.PARACHEST, syncId);
         this.blockEntity = blockEntity;
         int numRows = (blockEntity.getContainerSize() - 3) / 9;
@@ -76,7 +76,7 @@ public class ParachestMenu extends AbstractContainerMenu {
         return true;
     }
 
-    public ParaChestBlockEntity getBlockEntity() {
+    public ParachestBlockEntity getBlockEntity() {
         return this.blockEntity;
     }
 }

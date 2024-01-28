@@ -29,7 +29,7 @@ import dev.galacticraft.mod.content.block.entity.networked.FluidPipeWalkwayBlock
 import dev.galacticraft.mod.content.block.entity.networked.GlassFluidPipeBlockEntity;
 import dev.galacticraft.mod.content.block.entity.networked.WireBlockEntity;
 import dev.galacticraft.mod.content.block.entity.networked.WireWalkwayBlockEntity;
-import dev.galacticraft.mod.content.block.special.ParaChestBlockEntity;
+import dev.galacticraft.mod.content.block.special.ParachestBlockEntity;
 import dev.galacticraft.mod.content.block.special.rocketlaunchpad.RocketLaunchPadBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
@@ -75,7 +75,7 @@ public class GCBlockEntityTypes {
     // ROCKETS
     public static final BlockEntityType<RocketLaunchPadBlockEntity> LAUNCH_PAD_TYPE = FabricBlockEntityTypeBuilder.create(RocketLaunchPadBlockEntity::new, GCBlocks.ROCKET_LAUNCH_PAD).build();
     public static final BlockEntityType<FuelLoaderBlockEntity> FUEL_LOADER = FabricBlockEntityTypeBuilder.create(FuelLoaderBlockEntity::new, GCBlocks.FUEL_LOADER).build();
-    public static final BlockEntityType<ParaChestBlockEntity> PARACHEST = FabricBlockEntityTypeBuilder.create(ParaChestBlockEntity::new, GCBlocks.PARACHEST).build();
+    public static final BlockEntityType<ParachestBlockEntity> PARACHEST = FabricBlockEntityTypeBuilder.create(ParachestBlockEntity::new, GCBlocks.PARACHEST).build();
 
     // MISC
     public static final BlockEntityType<SolarPanelPartBlockEntity> SOLAR_PANEL_PART = FabricBlockEntityTypeBuilder.create(SolarPanelPartBlockEntity::new, GCBlocks.SOLAR_PANEL_PART).build();

@@ -24,8 +24,8 @@ package dev.galacticraft.mod.content.entity;
 
 import dev.galacticraft.mod.content.GCBlocks;
 import dev.galacticraft.mod.content.GCFluids;
-import dev.galacticraft.mod.content.block.special.ParaChestBlock;
-import dev.galacticraft.mod.content.block.special.ParaChestBlockEntity;
+import dev.galacticraft.mod.content.block.special.ParachestBlock;
+import dev.galacticraft.mod.content.block.special.ParachestBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
@@ -36,6 +36,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
@@ -46,6 +47,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Collections;
 
@@ -166,11 +168,12 @@ public class ParachestEntity extends Entity {
     }
 
     private boolean placeChest(BlockPos pos) {
-        if (this.level().setBlock(pos, GCBlocks.PARACHEST.defaultBlockState().setValue(ParaChestBlock.COLOR, DyeColor.byId(this.entityData.get(COLOR))), Block.UPDATE_ALL)) {
+        BlockState newState = GCBlocks.PARACHEST.defaultBlockState().setValue(ParachestBlock.COLOR, DyeColor.byId(this.entityData.get(COLOR)));
+        if (this.level().setBlock(pos, newState, Block.UPDATE_ALL)) {
             if (this.cargo != null) {
-                final BlockEntity te = this.level().getBlockEntity(pos);
+                final BlockEntity blockEntity = this.level().getBlockEntity(pos);
 
-                if (te instanceof ParaChestBlockEntity chest) {
+                if (blockEntity instanceof ParachestBlockEntity chest) {
                     chest.setItems(NonNullList.withSize(this.cargo.size() + 1, ItemStack.EMPTY));
 
                     Collections.copy(chest.getItems(), this.cargo);
@@ -180,10 +183,7 @@ public class ParachestEntity extends Entity {
                         tx.commit();
                     }
                 } else {
-                    for (ItemStack stack : this.cargo) {
-                        final ItemEntity e = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), stack);
-                        this.level().addFreshEntity(e);
-                    }
+                    Containers.dropContents(this.level(), pos, this.cargo);
                 }
             }
             return true;

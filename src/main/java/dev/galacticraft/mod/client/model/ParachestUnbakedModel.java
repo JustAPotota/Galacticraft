@@ -57,6 +57,6 @@ public record ParachestUnbakedModel(UnbakedModel parentModel, Map<DyeColor, Unba
         chutes.forEach((color, unbakedModel) -> {
             bakedChutes.put(color, unbakedModel.bake(modelBaker, function, modelState, resourceLocation));
         });
-        return new ParaChestBakedModel(parentModel.bake(modelBaker, function, modelState, resourceLocation), bakedChutes);
+        return new ParachestBakedModel(parentModel.bake(modelBaker, function, modelState, resourceLocation), bakedChutes);
     }
 }

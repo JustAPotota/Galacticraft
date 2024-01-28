@@ -51,8 +51,6 @@ public class ParachestRenderer extends EntityRenderer<ParachestEntity> {
 
     }
 
-
-
     @Override
     public void render(ParachestEntity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         this.parachute.setupAnim(entity, 0F, 0F, 0F, 0F, 0F);

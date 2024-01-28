@@ -250,7 +250,7 @@ public class GCBlocks {
     public static final Block GLASS_FLUID_PIPE = BLOCKS.register(Constant.Block.GLASS_FLUID_PIPE, new GlassFluidPipeBlock(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.HAT).sound(SoundType.GLASS)));
     public static final Block ROCKET_LAUNCH_PAD = new RocketLaunchPadBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).strength(1.5F, 6.0F));
     public static final Block ROCKET_WORKBENCH = BLOCKS.register(Constant.Block.ROCKET_WORKBENCH, new RocketWorkbench(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).strength(1.5F, 6.0F)));
-    public static final Block PARACHEST = BLOCKS.registerWithItem(Constant.Block.PARACHEST, new ParaChestBlock(BlockBehaviour.Properties.of()));
+    public static final Block PARACHEST = BLOCKS.registerWithItem(Constant.Block.PARACHEST, new ParachestBlock(BlockBehaviour.Properties.of()));
 
     // LIGHT PANELS
     public static final Block SQUARE_LIGHT_PANEL = new LightPanelBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL));

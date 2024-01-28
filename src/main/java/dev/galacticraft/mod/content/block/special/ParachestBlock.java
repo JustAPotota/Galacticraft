@@ -48,14 +48,14 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ParaChestBlock extends GCBlock implements EntityBlock {
+public class ParachestBlock extends GCBlock implements EntityBlock {
     public static final String COLOR_TAG = "color";
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final EnumProperty<DyeColor> COLOR = EnumProperty.create("color", DyeColor.class);
 
     protected static final VoxelShape AABB = Block.box(1.0, 0.0, 1.0, 15.0, 14.0, 15.0);
 
-    public ParaChestBlock(Properties properties) {
+    public ParachestBlock(Properties properties) {
         super(properties);
         registerDefaultState(getStateDefinition().any().setValue(FACING, Direction.NORTH));
     }
@@ -120,6 +120,6 @@ public class ParaChestBlock extends GCBlock implements EntityBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new ParaChestBlockEntity(blockPos, blockState);
+        return new ParachestBlockEntity(blockPos, blockState);
     }
 }

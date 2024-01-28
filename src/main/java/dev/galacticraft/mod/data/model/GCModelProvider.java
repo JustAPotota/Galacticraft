@@ -27,7 +27,7 @@ import dev.galacticraft.mod.Constant;
 import dev.galacticraft.mod.content.GCBlocks;
 import dev.galacticraft.mod.content.block.decoration.GratingBlock;
 import dev.galacticraft.mod.content.block.environment.CavernousVines;
-import dev.galacticraft.mod.content.block.special.ParaChestBlock;
+import dev.galacticraft.mod.content.block.special.ParachestBlock;
 import dev.galacticraft.mod.content.block.special.rocketlaunchpad.RocketLaunchPadBlock;
 import dev.galacticraft.mod.content.item.GCItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -246,12 +246,12 @@ public class GCModelProvider extends FabricModelProvider {
 
         var para = MultiPartGenerator.multiPart(GCBlocks.PARACHEST);
         GCBlocks.PARACHEST.getStateDefinition().getPossibleStates().forEach(state -> {
-            para.with(Condition.condition().term(ParaChestBlock.FACING, state.getValue(ParaChestBlock.FACING))/*.term(ParaChestBlock.COLOR, state.getValue(ParaChestBlock.COLOR))*/, Variant.variant()
-                    .with(VariantProperties.Y_ROT, getRotationFromDirection(state.getValue(ParaChestBlock.FACING)))
+            para.with(Condition.condition().term(ParachestBlock.FACING, state.getValue(ParachestBlock.FACING))/*.term(ParaChestBlock.COLOR, state.getValue(ParaChestBlock.COLOR))*/, Variant.variant()
+                    .with(VariantProperties.Y_ROT, getRotationFromDirection(state.getValue(ParachestBlock.FACING)))
                     .with(VariantProperties.MODEL, new ResourceLocation("galacticraft:block/parachest/parachest")));
-            para.with(Condition.condition().term(ParaChestBlock.COLOR, state.getValue(ParaChestBlock.COLOR)), Variant.variant()
-                    .with(VariantProperties.Y_ROT, getRotationFromDirection(state.getValue(ParaChestBlock.FACING)))
-                    .with(VariantProperties.MODEL, new ResourceLocation("galacticraft:block/parachest/" + state.getValue(ParaChestBlock.COLOR) + "_chute")));
+            para.with(Condition.condition().term(ParachestBlock.COLOR, state.getValue(ParachestBlock.COLOR)), Variant.variant()
+                    .with(VariantProperties.Y_ROT, getRotationFromDirection(state.getValue(ParachestBlock.FACING)))
+                    .with(VariantProperties.MODEL, new ResourceLocation("galacticraft:block/parachest/" + state.getValue(ParachestBlock.COLOR) + "_chute")));
         });
         generator.blockStateOutput.accept(para);
     }

@@ -23,7 +23,7 @@
 package dev.galacticraft.mod.client.model;
 
 import dev.galacticraft.mod.content.GCBlocks;
-import dev.galacticraft.mod.content.block.special.ParaChestBlock;
+import dev.galacticraft.mod.content.block.special.ParachestBlock;
 import net.fabricmc.fabric.api.renderer.v1.model.WrapperBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.renderer.block.model.*;
@@ -46,12 +46,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public record ParaChestBakedModel(BakedModel parent, Map<DyeColor, BakedModel> bakedChutes) implements BakedModel, WrapperBakedModel {
+public record ParachestBakedModel(BakedModel parent, Map<DyeColor, BakedModel> bakedChutes) implements BakedModel, WrapperBakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState blockState, @Nullable Direction direction, RandomSource randomSource) {
         List<BakedQuad> quads = new ArrayList<>(parent.getQuads(blockState, direction, randomSource));
         if (blockState != null)
-            quads.addAll(bakedChutes.get(blockState.getValue(ParaChestBlock.COLOR)).getQuads(blockState, direction, randomSource));
+            quads.addAll(bakedChutes.get(blockState.getValue(ParachestBlock.COLOR)).getQuads(blockState, direction, randomSource));
         return quads;
     }
 
@@ -120,9 +120,9 @@ public record ParaChestBakedModel(BakedModel parent, Map<DyeColor, BakedModel> b
         return parent;
     }
 
-    public class ParaChestOverride extends ItemOverrides {
+    public class ParachestOverride extends ItemOverrides {
 
-        public ParaChestOverride(ModelBaker modelBaker, BlockModel blockModel, List<ItemOverride> list) {
+        public ParachestOverride(ModelBaker modelBaker, BlockModel blockModel, List<ItemOverride> list) {
             super(modelBaker, blockModel, list);
         }
     }
