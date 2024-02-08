@@ -105,6 +105,10 @@ public class ParachestEntity extends Entity {
 
     @Override
     public void tick() {
+        if (!this.level().isClientSide && this.tickCount % 5 == 0) {
+            this.entityData.set(COLOR, (byte) this.color.getId());
+        }
+
         if (!this.placedChest) {
             if (this.onGround() && !this.level().isClientSide) {
                 for (int i = 0; i < 100; i++) {
@@ -143,14 +147,10 @@ public class ParachestEntity extends Entity {
                 this.placedChest = true;
                 this.discard();
             } else {
-//                this.setDeltaMovement(new Vec3(0, -0.35, 0));
+                this.setDeltaMovement(new Vec3(0, -0.35, 0));
             }
 
             this.move(MoverType.SELF, getDeltaMovement());
-        }
-
-        if (!this.level().isClientSide && this.tickCount % 5 == 0) {
-            this.entityData.set(COLOR, (byte) this.color.getId());
         }
     }
 
@@ -168,7 +168,7 @@ public class ParachestEntity extends Entity {
     }
 
     private boolean placeChest(BlockPos pos) {
-        BlockState newState = GCBlocks.PARACHEST.defaultBlockState().setValue(ParachestBlock.COLOR, DyeColor.byId(this.entityData.get(COLOR)));
+        BlockState newState = GCBlocks.PARACHESTS.get(DyeColor.byId(this.entityData.get(COLOR))).defaultBlockState();
         if (this.level().setBlock(pos, newState, Block.UPDATE_ALL)) {
             if (this.cargo != null) {
                 final BlockEntity blockEntity = this.level().getBlockEntity(pos);

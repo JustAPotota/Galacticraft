@@ -50,29 +50,33 @@ public record ParachestBakedModel(BakedModel parent, Map<DyeColor, BakedModel> b
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState blockState, @Nullable Direction direction, RandomSource randomSource) {
         List<BakedQuad> quads = new ArrayList<>(parent.getQuads(blockState, direction, randomSource));
-        if (blockState != null)
-            quads.addAll(bakedChutes.get(blockState.getValue(ParachestBlock.COLOR)).getQuads(blockState, direction, randomSource));
+        if (blockState != null) {
+            DyeColor color = GCBlocks.getParachestColor(blockState);
+            quads.addAll(bakedChutes.get(color).getQuads(blockState, direction, randomSource));
+        }
+
         return quads;
     }
 
     @Override
     public void emitItemQuads(ItemStack stack, Supplier<RandomSource> randomSupplier, RenderContext context) {
         BakedModel.super.emitItemQuads(stack, randomSupplier, context);
-        CompoundTag compoundTag = stack.getTag();
-        if (compoundTag != null) {
-            CompoundTag blockStateTag = compoundTag.getCompound("BlockStateTag");
-            StateDefinition<Block, BlockState> stateDefinition = GCBlocks.PARACHEST.getStateDefinition();
-
-
-                Property<?> property = stateDefinition.getProperty("color");
-                if (property != null) {
-                    property.getValue(blockStateTag.getString("color")).ifPresent(color -> {
-                        bakedChutes.get(color).emitItemQuads(stack, randomSupplier, context);
-                    });
-                }
-        } else {
-            bakedChutes.get(DyeColor.WHITE).emitItemQuads(stack, randomSupplier, context);
-        }
+        bakedChutes.get(GCBlocks.getParachestColor(stack)).emitItemQuads(stack, randomSupplier, context);
+//        CompoundTag compoundTag = stack.getTag();
+//        if (compoundTag != null) {
+//            CompoundTag blockStateTag = compoundTag.getCompound("BlockStateTag");
+//            StateDefinition<Block, BlockState> stateDefinition = GCBlocks.PARACHEST.getStateDefinition();
+//
+//
+//                Property<?> property = stateDefinition.getProperty("color");
+//                if (property != null) {
+//                    property.getValue(blockStateTag.getString("color")).ifPresent(color -> {
+//                        bakedChutes.get(color).emitItemQuads(stack, randomSupplier, context);
+//                    });
+//                }
+//        } else {
+//            bakedChutes.get(DyeColor.WHITE).emitItemQuads(stack, randomSupplier, context);
+//        }
     }
 
     @Override

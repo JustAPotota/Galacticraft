@@ -48,6 +48,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Contract;
 
+import java.util.Map;
+
 public class GCModelProvider extends FabricModelProvider {
     private static final TexturedModel.Provider DETAILED_DECORATION = TexturedModel.createDefault(GCModelProvider::detailedTexture, ModelTemplates.CUBE_BOTTOM_TOP);
 
@@ -244,16 +246,31 @@ public class GCModelProvider extends FabricModelProvider {
         this.createAirLockController(generator);
         generator.createNonTemplateModelBlock(GCBlocks.AIR_LOCK_SEAL);
 
-        var para = MultiPartGenerator.multiPart(GCBlocks.PARACHEST);
-        GCBlocks.PARACHEST.getStateDefinition().getPossibleStates().forEach(state -> {
-            para.with(Condition.condition().term(ParachestBlock.FACING, state.getValue(ParachestBlock.FACING))/*.term(ParaChestBlock.COLOR, state.getValue(ParaChestBlock.COLOR))*/, Variant.variant()
-                    .with(VariantProperties.Y_ROT, getRotationFromDirection(state.getValue(ParachestBlock.FACING)))
-                    .with(VariantProperties.MODEL, new ResourceLocation("galacticraft:block/parachest/parachest")));
-            para.with(Condition.condition().term(ParachestBlock.COLOR, state.getValue(ParachestBlock.COLOR)), Variant.variant()
-                    .with(VariantProperties.Y_ROT, getRotationFromDirection(state.getValue(ParachestBlock.FACING)))
-                    .with(VariantProperties.MODEL, new ResourceLocation("galacticraft:block/parachest/" + state.getValue(ParachestBlock.COLOR) + "_chute")));
-        });
-        generator.blockStateOutput.accept(para);
+
+        for (Map.Entry<DyeColor, Block> entry : GCBlocks.PARACHESTS.entrySet()) {
+            DyeColor color = entry.getKey();
+            Block parachest = entry.getValue();
+            var multiPart = MultiPartGenerator.multiPart(parachest);
+            parachest.getStateDefinition().getPossibleStates().forEach(state -> {
+                multiPart.with(Condition.condition().term(ParachestBlock.FACING, state.getValue(ParachestBlock.FACING)), Variant.variant()
+                        .with(VariantProperties.Y_ROT, getRotationFromDirection(state.getValue(ParachestBlock.FACING)))
+                        .with(VariantProperties.MODEL, new ResourceLocation("galacticraft:block/parachest/parachest")));
+                multiPart.with(Condition.condition().term(ParachestBlock.FACING, state.getValue(ParachestBlock.FACING)), Variant.variant()
+                        .with(VariantProperties.Y_ROT, getRotationFromDirection(state.getValue(ParachestBlock.FACING)))
+                        .with(VariantProperties.MODEL, new ResourceLocation(Constant.MOD_ID, "block/parachest/" + color.getName() + "_chute")));
+            });
+            generator.blockStateOutput.accept(multiPart);
+        }
+//        var para = MultiPartGenerator.multiPart(GCBlocks.PARACHEST);
+//        GCBlocks.PARACHEST.getStateDefinition().getPossibleStates().forEach(state -> {
+//            para.with(Condition.condition().term(ParachestBlock.FACING, state.getValue(ParachestBlock.FACING))/*.term(ParaChestBlock.COLOR, state.getValue(ParaChestBlock.COLOR))*/, Variant.variant()
+//                    .with(VariantProperties.Y_ROT, getRotationFromDirection(state.getValue(ParachestBlock.FACING)))
+//                    .with(VariantProperties.MODEL, new ResourceLocation("galacticraft:block/parachest/parachest")));
+//            para.with(Condition.condition().term(ParachestBlock.COLOR, state.getValue(ParachestBlock.COLOR)), Variant.variant()
+//                    .with(VariantProperties.Y_ROT, getRotationFromDirection(state.getValue(ParachestBlock.FACING)))
+//                    .with(VariantProperties.MODEL, new ResourceLocation("galacticraft:block/parachest/" + state.getValue(ParachestBlock.COLOR) + "_chute")));
+//        });
+//        generator.blockStateOutput.accept(para);
     }
 
     public static VariantProperties.Rotation getRotationFromDirection(Direction direction) {

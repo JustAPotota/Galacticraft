@@ -39,6 +39,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 
 import static dev.galacticraft.mod.content.item.GCItems.*;
 
@@ -191,18 +192,7 @@ public class GCCreativeModeTabs {
                 //GALACTICRAFT INVENTORY
                 output.accept(PARACHUTE);
 
-                for (DyeColor color : DyeColor.values()) {
-                    ItemStack stack = new ItemStack(GCBlocks.PARACHEST);
-                    CompoundTag itemTag = new CompoundTag();
-                    CompoundTag blockStateTag;
-
-                    blockStateTag = new CompoundTag();
-                    itemTag.put("BlockStateTag", blockStateTag);
-                    blockStateTag.putString("color", color.getName());
-
-                    stack.setTag(itemTag);
-                    output.accept(stack);
-                }
+                output.accept(new ItemStack(GCBlocks.PARACHESTS.get(DyeColor.WHITE)));
 
                 output.accept(OXYGEN_MASK);
                 output.accept(OXYGEN_GEAR);

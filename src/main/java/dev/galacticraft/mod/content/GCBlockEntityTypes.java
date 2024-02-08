@@ -34,6 +34,7 @@ import dev.galacticraft.mod.content.block.special.rocketlaunchpad.RocketLaunchPa
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 /**
@@ -75,7 +76,7 @@ public class GCBlockEntityTypes {
     // ROCKETS
     public static final BlockEntityType<RocketLaunchPadBlockEntity> LAUNCH_PAD_TYPE = FabricBlockEntityTypeBuilder.create(RocketLaunchPadBlockEntity::new, GCBlocks.ROCKET_LAUNCH_PAD).build();
     public static final BlockEntityType<FuelLoaderBlockEntity> FUEL_LOADER = FabricBlockEntityTypeBuilder.create(FuelLoaderBlockEntity::new, GCBlocks.FUEL_LOADER).build();
-    public static final BlockEntityType<ParachestBlockEntity> PARACHEST = FabricBlockEntityTypeBuilder.create(ParachestBlockEntity::new, GCBlocks.PARACHEST).build();
+    public static final BlockEntityType<ParachestBlockEntity> PARACHEST = FabricBlockEntityTypeBuilder.create(ParachestBlockEntity::new, GCBlocks.PARACHESTS.values().toArray(new Block[0])).build();
 
     // MISC
     public static final BlockEntityType<SolarPanelPartBlockEntity> SOLAR_PANEL_PART = FabricBlockEntityTypeBuilder.create(SolarPanelPartBlockEntity::new, GCBlocks.SOLAR_PANEL_PART).build();

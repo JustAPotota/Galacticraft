@@ -35,11 +35,15 @@ public class GCModelLoader implements ModelLoadingPlugin {
     public static final GCModelLoader INSTANCE = new GCModelLoader();
     private static final ResourceLocation PARACHEST_ITEM = new ResourceLocation(Constant.MOD_ID, "item/parachest");
 
+    private static boolean isParachest(ResourceLocation id) {
+        return id.getNamespace().equals(Constant.MOD_ID) && id.getPath().endsWith("_parachest");
+    }
+
     @Override
     public void onInitializeModelLoader(Context pluginContext) {
 
         pluginContext.resolveModel().register(context -> {
-            if (context.id().equals(PARACHEST_ITEM)) {
+            if (isParachest(context.id())) {
                 Map<DyeColor, UnbakedModel> chutes = new HashMap<>();
                 for (DyeColor color : DyeColor.values()) {
                     chutes.put(color, context.getOrLoadModel(Constant.id("block/parachest/" + color.getName() + "_chute")));

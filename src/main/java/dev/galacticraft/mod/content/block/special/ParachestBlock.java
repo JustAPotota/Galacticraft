@@ -51,7 +51,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class ParachestBlock extends GCBlock implements EntityBlock {
     public static final String COLOR_TAG = "color";
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
-    public static final EnumProperty<DyeColor> COLOR = EnumProperty.create("color", DyeColor.class);
 
     protected static final VoxelShape AABB = Block.box(1.0, 0.0, 1.0, 15.0, 14.0, 15.0);
 
@@ -63,7 +62,7 @@ public class ParachestBlock extends GCBlock implements EntityBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(FACING, COLOR);
+        builder.add(FACING);
     }
 
     @Override
@@ -78,15 +77,15 @@ public class ParachestBlock extends GCBlock implements EntityBlock {
 
     @Override
     public void playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
-        if (!level.isClientSide) {
-            CompoundTag stateTag = new CompoundTag();
-            stateTag.putString(COLOR_TAG, blockState.getValue(COLOR).getName());
-            ItemStack parachest = new ItemStack(this);
-            parachest.addTagElement(BlockItem.BLOCK_STATE_TAG, stateTag);
-            ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), parachest);
-            itemEntity.setDefaultPickUpDelay();
-            level.addFreshEntity(itemEntity);
-        }
+//        if (!level.isClientSide) {
+//            CompoundTag stateTag = new CompoundTag();
+//            stateTag.putString(COLOR_TAG, blockState.getValue(COLOR).getName());
+//            ItemStack parachest = new ItemStack(this);
+//            parachest.addTagElement(BlockItem.BLOCK_STATE_TAG, stateTag);
+//            ItemEntity itemEntity = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), parachest);
+//            itemEntity.setDefaultPickUpDelay();
+//            level.addFreshEntity(itemEntity);
+//        }
         super.playerWillDestroy(level, blockPos, blockState, player);
     }
 

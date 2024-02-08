@@ -46,6 +46,10 @@ import net.fabricmc.fabric.api.registry.FlattenableBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -55,6 +59,8 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.ToIntFunction;
 
 /**
@@ -250,7 +256,16 @@ public class GCBlocks {
     public static final Block GLASS_FLUID_PIPE = BLOCKS.register(Constant.Block.GLASS_FLUID_PIPE, new GlassFluidPipeBlock(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.HAT).sound(SoundType.GLASS)));
     public static final Block ROCKET_LAUNCH_PAD = new RocketLaunchPadBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).strength(1.5F, 6.0F));
     public static final Block ROCKET_WORKBENCH = BLOCKS.register(Constant.Block.ROCKET_WORKBENCH, new RocketWorkbench(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).strength(1.5F, 6.0F)));
-    public static final Block PARACHEST = BLOCKS.registerWithItem(Constant.Block.PARACHEST, new ParachestBlock(BlockBehaviour.Properties.of()));
+
+    public static final Map<DyeColor, Block> PARACHESTS = new HashMap<>();
+    static {
+        for (DyeColor color : DyeColor.values()) {
+            ParachestBlock parachest = new ParachestBlock(BlockBehaviour.Properties.of());
+            String id = String.format("%s_%s", color.getName(), Constant.Block.PARACHEST);
+            BLOCKS.registerWithItem(id, parachest);
+            PARACHESTS.put(color, parachest);
+        }
+    }
 
     // LIGHT PANELS
     public static final Block SQUARE_LIGHT_PANEL = new LightPanelBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL));
@@ -645,5 +660,23 @@ public class GCBlocks {
 
     private static ToIntFunction<BlockState> litBlockEmission(int i) {
         return blockState -> blockState.getValue(BlockStateProperties.LIT) ? i : 0;
+    }
+
+    public static DyeColor getParachestColor(BlockState state) {
+        for (Map.Entry<DyeColor, Block> entry : PARACHESTS.entrySet()) {
+            if (state.is(entry.getValue()))
+                return entry.getKey();
+        }
+        return DyeColor.WHITE;
+    }
+
+    public static DyeColor getParachestColor(ItemStack stack) {
+        Item item = stack.getItem();
+        for (Map.Entry<DyeColor, Block> entry : PARACHESTS.entrySet()) {
+            if (item instanceof BlockItem && ((BlockItem) item).getBlock() == entry.getValue()) {
+                return entry.getKey();
+            }
+        }
+        return DyeColor.WHITE;
     }
 }
