@@ -68,7 +68,27 @@ public class ParachestMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int i) {
-        return null;
+        ItemStack itemStack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(i);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemStack2 = slot.getItem();
+            itemStack = itemStack2.copy();
+            if (i < this.blockEntity.getContainerSize()) {
+                if (!this.moveItemStackTo(itemStack2, this.blockEntity.getContainerSize(), this.slots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (!this.moveItemStackTo(itemStack2, 0, this.blockEntity.getContainerSize(), false)) {
+                return ItemStack.EMPTY;
+            }
+
+            if (itemStack2.isEmpty()) {
+                slot.setByPlayer(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+        }
+
+        return itemStack;
     }
 
     @Override
