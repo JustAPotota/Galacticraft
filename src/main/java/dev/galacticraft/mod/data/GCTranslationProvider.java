@@ -889,12 +889,12 @@ public class GCTranslationProvider extends TranslationProvider {
         this.blockDesc(GCBlocks.COMPRESSOR, "Compresses ingots to create stronger materials. Requires furnace fuel to run");
         this.blockDesc(GCBlocks.ELECTRIC_COMPRESSOR, "Compresses ingots to create stronger materials");
         this.blockDesc(GCBlocks.ELECTRIC_FURNACE, "Uses electricity instead of fuel to smelt items");
-        this.blockDesc(GCBlocks.ELECTRIC_ARC_FURNACE, "A faster, electric version of the Blast Furnace");
+        this.blockDesc(GCBlocks.ELECTRIC_ARC_FURNACE, "A faster, electric blast furnace for smelting ores");
         this.blockDesc(GCBlocks.ENERGY_STORAGE_MODULE, "Stores a large amount of energy");
         this.blockDesc(GCBlocks.FUEL_LOADER, "Loads fuel into a rocket placed on an adjacent launch pad");
         this.blockDesc(GCBlocks.OXYGEN_BUBBLE_DISTRIBUTOR, "Creates a breathable bubble of oxygen in a small area");
         this.blockDesc(GCBlocks.OXYGEN_DECOMPRESSOR, "Empties oxygen tanks");
-        this.blockDesc(GCBlocks.OXYGEN_COLLECTOR, "Collects oxygen from nearby naturally-grown leaves");
+        this.blockDesc(GCBlocks.OXYGEN_COLLECTOR, "Collects oxygen from nearby crops and trees");
         this.blockDesc(GCBlocks.OXYGEN_COMPRESSOR, "Fills up oxygen tanks");
         this.blockDesc(GCBlocks.OXYGEN_SEALER, "Fills an airtight room with oxygen to make it breathable");
         this.blockDesc(GCBlocks.OXYGEN_STORAGE_MODULE, "Stores a large amount of oxygen");
