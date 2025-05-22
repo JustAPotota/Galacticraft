@@ -883,7 +883,7 @@ public class GCTranslationProvider extends TranslationProvider {
     protected void generateTooltipTranslations() {
         // Block Descriptions
         this.blockDesc(GCBlocks.ADVANCED_SOLAR_PANEL, "A more efficient solar panel that rotates to face the sun");
-        this.blockDesc(GCBlocks.BASIC_SOLAR_PANEL, "Converts energy from the sun into electricity. Most effect at noon");
+        this.blockDesc(GCBlocks.BASIC_SOLAR_PANEL, "Converts energy from the sun into electricity. Most effective at noon");
         this.blockDesc(GCBlocks.CIRCUIT_FABRICATOR, "Fabricates the silicon wafers needed for more advanced machines");
         this.blockDesc(GCBlocks.COAL_GENERATOR, "Burns coal and charcoal to generate electricity");
         this.blockDesc(GCBlocks.COMPRESSOR, "Compresses ingots to create stronger materials. Requires furnace fuel to run");
