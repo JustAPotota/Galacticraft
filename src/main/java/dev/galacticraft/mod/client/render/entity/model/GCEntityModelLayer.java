@@ -24,6 +24,7 @@ package dev.galacticraft.mod.client.render.entity.model;
 
 import dev.galacticraft.mod.Constant;
 import dev.galacticraft.mod.client.model.entity.*;
+import dev.galacticraft.mod.client.render.block.entity.FlagBlockEntityRenderer;
 import dev.galacticraft.mod.client.render.block.entity.SolarPanelBlockEntityRenderer;
 import dev.galacticraft.mod.client.render.block.entity.RocketWorkbenchBlockEntityRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -44,6 +45,7 @@ public class GCEntityModelLayer {
     public static final ModelLayerLocation SKELETON_BOSS = new ModelLayerLocation(Constant.id("skeleton_boss"), "main");
 
     // Block Entity Renderers
+    public static final ModelLayerLocation FLAG = new ModelLayerLocation(Constant.id("flag"), "main");
     public static final ModelLayerLocation SOLAR_PANEL = new ModelLayerLocation(Constant.id("solar_panel"), "main");
     public static final ModelLayerLocation ROCKET_WORKBENCH = new ModelLayerLocation(Constant.id("rocket_workbench"), "main");
 
@@ -60,6 +62,7 @@ public class GCEntityModelLayer {
 
         EntityModelLayerRegistry.registerModelLayer(SKELETON_BOSS, EvolvedSkeletonBossModel::createBodyLayer);
 
+        EntityModelLayerRegistry.registerModelLayer(FLAG, FlagBlockEntityRenderer::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(SOLAR_PANEL, SolarPanelBlockEntityRenderer::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ROCKET_WORKBENCH, RocketWorkbenchBlockEntityRenderer::getTexturedModelData);
     }

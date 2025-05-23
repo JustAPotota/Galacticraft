@@ -25,6 +25,7 @@ package dev.galacticraft.mod.content;
 import dev.galacticraft.mod.Constant;
 import dev.galacticraft.mod.content.block.entity.*;
 import dev.galacticraft.mod.content.block.entity.decoration.CannedFoodBlockEntity;
+import dev.galacticraft.mod.content.block.entity.decoration.FlagBlockEntity;
 import dev.galacticraft.mod.content.block.entity.machine.*;
 import dev.galacticraft.mod.content.block.entity.networked.FluidPipeWalkwayBlockEntity;
 import dev.galacticraft.mod.content.block.entity.networked.GlassFluidPipeBlockEntity;
@@ -33,6 +34,7 @@ import dev.galacticraft.mod.content.block.entity.networked.WireWalkwayBlockEntit
 import dev.galacticraft.mod.content.block.special.launchpad.LaunchPadBlockEntity;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class GCBlockEntityTypes {
@@ -83,6 +85,7 @@ public class GCBlockEntityTypes {
 
     // DECORATION
     public static final BlockEntityType<CannedFoodBlockEntity> CANNED_FOOD = BlockEntityType.Builder.of(CannedFoodBlockEntity::new, GCBlocks.CANNED_FOOD).build();
+    public static final BlockEntityType<FlagBlockEntity> FLAG = BlockEntityType.Builder.of(FlagBlockEntity::new, GCBlocks.FLAGS.values().toArray(Block[]::new)).build();
 
     public static final BlockEntityType<AirlockControllerBlockEntity> AIRLOCK_CONTROLLER = BlockEntityType.Builder.of(AirlockControllerBlockEntity::new, GCBlocks.AIR_LOCK_CONTROLLER).build();
     public static final BlockEntityType<RocketWorkbenchBlockEntity> ROCKET_WORKBENCH = BlockEntityType.Builder.of(RocketWorkbenchBlockEntity::new, GCBlocks.ROCKET_WORKBENCH).build();
@@ -125,6 +128,7 @@ public class GCBlockEntityTypes {
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Constant.id(Constant.Block.ROCKET_WORKBENCH), ROCKET_WORKBENCH);
 
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Constant.id(Constant.Block.CANNED_FOOD), CANNED_FOOD);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Constant.id(Constant.Block.FLAG), FLAG);
     }
 
     private static void register(String id, BlockEntityType<?> type) {

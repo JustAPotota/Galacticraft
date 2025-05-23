@@ -173,6 +173,9 @@ public class GCBlockLootTableProvider extends FabricBlockLootTableProvider {
         this.dropSelf(GCBlocks.IRON_GRATING);
 
         this.add(GCBlocks.CANNED_FOOD, LootTable.lootTable());
+        for (Block flag : GCBlocks.FLAGS.values()) {
+            this.dropSelf(flag);
+        }
 
         this.dropSelf(GCBlocks.ALUMINUM_WIRE);
         this.dropSelf(GCBlocks.SEALABLE_ALUMINUM_WIRE);
