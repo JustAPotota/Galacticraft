@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.AbstractBannerBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,8 +22,8 @@ public class FlagBlock extends AbstractBannerBlock {
     ).apply(instance, FlagBlock::new));
 
     protected static final VoxelShape SHAPE = Shapes.or(
-            Shapes.box(6, 0, 6, 10, 2, 10),
-            Shapes.box(7, 2, 7, 9, 16, 9)
+            Block.box(6, 0, 6, 10, 2, 10),
+            Block.box(7, 0, 7, 9, 32, 9)
     );
 
     public FlagBlock(Properties properties, DyeColor color) {

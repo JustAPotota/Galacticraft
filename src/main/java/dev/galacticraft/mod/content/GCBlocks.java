@@ -94,7 +94,7 @@ public class GCBlocks {
     public static final Block CANNED_FOOD = BLOCKS.register(Constant.Block.CANNED_FOOD, new CannedFoodBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).strength(0.5F, 0.5F).sound(SoundType.METAL).noOcclusion().forceSolidOn()));
     public static final Map<DyeColor, Block> FLAGS = Util.make(new EnumMap<>(DyeColor.class), map -> {
         for (DyeColor color : DyeColor.values()) {
-            Block flag = new FlagBlock(BlockBehaviour.Properties.of().noCollission(), color);
+            Block flag = new FlagBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).strength(0.5f, 0.5f), color);
             BLOCKS.registerWithItem(color.getName() + "_" + Constant.Block.FLAG, flag);
             map.put(color, flag);
         }
