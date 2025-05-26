@@ -95,7 +95,7 @@ public class GCBlocks {
     public static final Map<DyeColor, Block> FLAGS = Util.make(new EnumMap<>(DyeColor.class), map -> {
         for (DyeColor color : DyeColor.values()) {
             Block flag = new FlagBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).strength(0.5f, 0.5f), color);
-            BLOCKS.registerWithItem(color.getName() + "_" + Constant.Block.FLAG, flag);
+            BLOCKS.register(color.getName() + '_' + Constant.Block.FLAG, flag);
             map.put(color, flag);
         }
     });

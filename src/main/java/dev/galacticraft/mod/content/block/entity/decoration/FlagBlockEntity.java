@@ -23,7 +23,7 @@
 package dev.galacticraft.mod.content.block.entity.decoration;
 
 import dev.galacticraft.mod.content.GCBlockEntityTypes;
-import dev.galacticraft.mod.content.GCBlocks;
+import dev.galacticraft.mod.content.item.GCItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -71,7 +71,7 @@ public class FlagBlockEntity extends BannerBlockEntity {
 
     @Override
     public @NotNull ItemStack getItem() {
-        ItemStack itemStack = new ItemStack(GCBlocks.FLAGS.get(this.getBaseColor()));
+        ItemStack itemStack = new ItemStack(GCItems.FLAGS.get(this.getBaseColor()));
         itemStack.applyComponents(this.collectComponents());
         return itemStack;
     }

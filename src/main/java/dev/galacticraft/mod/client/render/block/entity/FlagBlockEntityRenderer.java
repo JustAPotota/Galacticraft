@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2019-2025 Team Galacticraft
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package dev.galacticraft.mod.client.render.block.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -32,7 +54,10 @@ public class FlagBlockEntityRenderer implements BlockEntityRenderer<FlagBlockEnt
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
 
-        PartDefinition flag = root.addOrReplaceChild("flag", CubeListBuilder.create().texOffs(0, 0).addBox(-10.0F, 0.0F, -2.0F, 20.0F, 40.0F, 1.0F), PartPose.ZERO);
+        PartDefinition flag = root.addOrReplaceChild("flag",
+                CubeListBuilder.create().texOffs(0, 0).addBox(0, 0, 0, 20, 40, 1),
+                PartPose.rotation(0, 0, (float)Math.toRadians(90))
+        );
 
         return LayerDefinition.create(mesh, 64, 64);
     }
@@ -41,6 +66,10 @@ public class FlagBlockEntityRenderer implements BlockEntityRenderer<FlagBlockEnt
     public void render(FlagBlockEntity entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
         matrices.pushPose();
         matrices.mulPose(Axis.YP.rotation(entity.facingRadians()));
+        matrices.translate(0.4375, 2.041666667, 0.479166667);
+        matrices.scale((float) 2 /3, (float) 2 /3, (float) 2 /3);
+
+        this.flag.setPos(0, 0, 0);
         renderPatterns(
                 matrices, vertexConsumers, light, overlay, this.flag, ModelBakery.BANNER_BASE, entity.getBaseColor(), entity.getPatterns()
         );

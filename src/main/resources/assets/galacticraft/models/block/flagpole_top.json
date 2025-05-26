@@ -1,11 +1,9 @@
 {
-    "credit": "Made with Blockbench",
-    "parent": "minecraft:block/block",
+    "parent": "block/block",
     "elements": [
         {
-            "from": [6, 0, 6],
-            "to": [10, 2, 10],
-            "rotation": {"angle": 0, "axis": "y", "origin": [6, 0, 6]},
+            "from": [6, 14, 6],
+            "to": [10, 16, 10],
             "color": 1,
             "faces": {
                 "north": {"uv": [0, 0, 4, 2], "texture": "#missing"},
@@ -17,9 +15,8 @@
             }
         },
         {
-            "from": [7, 2, 7],
-            "to": [9, 32, 9],
-            "rotation": {"angle": 0, "axis": "y", "origin": [7, 2, 7]},
+            "from": [7, 0, 7],
+            "to": [9, 14, 9],
             "color": 7,
             "faces": {
                 "north": {"uv": [0, 0, 2, 16], "texture": "#missing"},
