@@ -41,6 +41,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -54,6 +55,7 @@ public class FlagBlock extends AbstractBannerBlock {
     ).apply(instance, FlagBlock::new));
 
     public static final EnumProperty<Section> SECTION = EnumProperty.create("section", Section.class);
+    public static final BooleanProperty DESTROYED = BooleanProperty.create("destroyed");
 
     public static final int HEIGHT = Section.values().length;
     public static final VoxelShape SHAPE = Shapes.or(
@@ -68,16 +70,20 @@ public class FlagBlock extends AbstractBannerBlock {
         this.registerDefaultState(
                 this.getStateDefinition().any()
                         .setValue(SECTION, Section.BOTTOM)
+                        .setValue(DESTROYED, false)
         );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> compositeStateBuilder) {
-        compositeStateBuilder.add(SECTION);
+        compositeStateBuilder.add(SECTION, DESTROYED);
     }
 
     @Override
     protected @NotNull VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        if (state.getValue(DESTROYED)) {
+            return Block.box(7, 0, 7, 9, 16, 9);
+        }
         Section section = state.getValue(SECTION);
         return SHAPE.move(0, -section.ordinal(), 0);
     }
@@ -144,13 +150,23 @@ public class FlagBlock extends AbstractBannerBlock {
         }
     }
 
+    // Copy of DoublePlantBlock$preventDropFromBottomPart
+    // Stops the flag from dropping when broken by a creative player
     @Override
     public @NotNull BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-        if (!level.isClientSide && (player.isCreative() || !player.hasCorrectToolForDrops(state))) {
-
+        Section section = state.getValue(SECTION);
+        if (section != Section.BOTTOM && !level.isClientSide && (player.isCreative() || !player.hasCorrectToolForDrops(state))) {
+            BlockPos bottomPos = pos.below(section.ordinal());
+            BlockState bottomState = level.getBlockState(bottomPos);
+            if (bottomState.is(this) && bottomState.getValue(SECTION) == Section.BOTTOM) {
+                level.destroyBlock(bottomPos, false);
+            }
         }
 
-        return super.playerWillDestroy(level, pos, state, player);
+        BlockState newState = state.setValue(DESTROYED, true);
+        level.setBlock(pos, newState, 0);
+
+        return super.playerWillDestroy(level, pos, newState, player);
     }
 
     @Override

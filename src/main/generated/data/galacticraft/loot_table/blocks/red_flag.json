@@ -11,6 +11,15 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "galacticraft:red_flag",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "section": "bottom"
+              }
+            }
+          ],
           "name": "galacticraft:red_flag"
         }
       ],
