@@ -60,8 +60,12 @@ public class FlagBlockEntity extends BannerBlockEntity {
         this.facingRadians = compound.getFloat("facing");
     }
 
-    public float facingRadians() {
+    public float getFacingRadians() {
         return facingRadians;
+    }
+
+    public void setFacingRadians(float radians) {
+        this.facingRadians = radians;
     }
 
     @Override

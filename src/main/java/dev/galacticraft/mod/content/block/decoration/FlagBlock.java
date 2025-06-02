@@ -137,6 +137,16 @@ public class FlagBlock extends AbstractBannerBlock {
             pos = pos.above();
             level.setBlock(pos, state.setValue(SECTION, Section.values()[i]), 3);
         }
+
+        if (placer != null && level.getBlockEntity(pos) instanceof FlagBlockEntity flag) {
+            flag.setFacingRadians((float) Math.toRadians(placer.getYHeadRot()));
+            flag.setChanged();
+        }
+    }
+
+    @Override
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean notify) {
+        super.onPlace(state, level, pos, oldState, notify);
     }
 
     @Override

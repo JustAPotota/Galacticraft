@@ -23,7 +23,6 @@
 package dev.galacticraft.mod.client.render.block.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import dev.galacticraft.mod.client.render.entity.model.GCEntityModelLayer;
 import dev.galacticraft.mod.content.block.entity.decoration.FlagBlockEntity;
 import net.minecraft.client.model.geom.ModelPart;
@@ -65,11 +64,10 @@ public class FlagBlockEntityRenderer implements BlockEntityRenderer<FlagBlockEnt
     @Override
     public void render(FlagBlockEntity entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
         matrices.pushPose();
-        matrices.mulPose(Axis.YP.rotation(entity.facingRadians()));
         matrices.translate(0.4375, 2.041666667, 0.479166667);
         matrices.scale((float) 2 /3, (float) 2 /3, (float) 2 /3);
 
-        this.flag.setPos(0, 0, 0);
+        this.flag.setRotation((float) Math.toDegrees(entity.getFacingRadians()), 0, this.flag.zRot);
         renderPatterns(
                 matrices, vertexConsumers, light, overlay, this.flag, ModelBakery.BANNER_BASE, entity.getBaseColor(), entity.getPatterns()
         );
