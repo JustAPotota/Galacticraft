@@ -74,6 +74,7 @@ public interface Translations {
         String ELECTRIC_COMPRESSOR = PREFIX + "compressing.electric";
         String ELECTRIC_FURNACE = PREFIX + "smelting.electric";
         String ELECTRIC_ARC_FURNACE = PREFIX + "blasting.electric";
+        String CANNING = PREFIX + "canning";
         String ROCKET_WORKBENCH = PREFIX + "rocket";
 
         String REI_TIME = "category.rei.campfire.time";
@@ -157,6 +158,10 @@ public interface Translations {
 
         String COMMANDS = "config.galacticraft.commands";
         String ENABLE_GC_HOUSTON = "config.galacticraft.commands.enable_gc_houston";
+
+        String MISC = "config.galacticraft.misc";
+        String CREATIVE = "config.galacticraft.misc.creative";
+        String ENABLE_CREATIVE_GEARINV = "config.galacticraft.misc.creative.enable_gearinv";
 
         String DEBUG = "config.galacticraft.debug";
         String DEBUG_LOGGING = "config.galacticraft.debug.logging";

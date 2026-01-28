@@ -92,6 +92,7 @@ public class GCTranslationProvider extends TranslationProvider {
         this.add(RecipeCategory.ELECTRIC_COMPRESSOR, "Compressing (Electric)");
         this.add(RecipeCategory.ELECTRIC_FURNACE, "Smelting (Electric)");
         this.add(RecipeCategory.ELECTRIC_ARC_FURNACE, "Blasting (Electric)");
+        this.add(RecipeCategory.CANNING, "Canning");
         this.add(RecipeCategory.ROCKET_WORKBENCH, "Rocket Crafting");
 
         this.add(BannerPattern.ROCKET + ".white", "White Rocket");
@@ -982,7 +983,9 @@ public class GCTranslationProvider extends TranslationProvider {
 
         this.add(Config.COMMANDS, "Commands");
         this.add(Config.ENABLE_GC_HOUSTON, "Enable /gchouston");
-
+        this.add(Config.MISC, "Misc");
+        this.add(Config.CREATIVE, "Creative");
+        this.add(Config.ENABLE_CREATIVE_GEARINV, "Enable Creative Gear Inventory");
         this.add(Config.DEBUG, "Debug");
         this.add(Config.DEBUG_LOGGING, "Debug Logging");
         this.add(Config.HIDE_ALPHA_WARNING, "Hide Alpha Warning");

@@ -23,15 +23,20 @@
 package dev.galacticraft.mod.compat.rei.client.category;
 
 import dev.galacticraft.mod.compat.rei.common.GalacticraftREIServerPlugin;
-import dev.galacticraft.mod.compat.rei.common.display.ElectricFurnaceDisplay;
+import dev.galacticraft.mod.compat.rei.common.display.DefaultCanningDisplay;
+import dev.galacticraft.mod.content.GCBlocks;
+import dev.galacticraft.mod.content.item.GCItems;
 import dev.galacticraft.mod.util.Translations;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
+import me.shedaniel.rei.api.client.gui.widgets.Slot;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
+import me.shedaniel.rei.api.common.entry.EntryIngredient;
+import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -39,55 +44,75 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.galacticraft.mod.Constant.ElectricFurnace.*;
-import static dev.galacticraft.mod.content.GCBlocks.ELECTRIC_FURNACE;
+import static dev.galacticraft.mod.Constant.FoodCanner.*;
 
 @Environment(EnvType.CLIENT)
-public class ElectricFurnaceCategory implements DisplayCategory<ElectricFurnaceDisplay> {
-    private static final DecimalFormat FORMAT = new DecimalFormat("###.##");
-
+public class DefaultCanningCategory implements DisplayCategory<DefaultCanningDisplay> {
     @Override
-    public CategoryIdentifier<? extends ElectricFurnaceDisplay> getCategoryIdentifier() {
-        return GalacticraftREIServerPlugin.ELECTRIC_SMELTING;
+    public CategoryIdentifier<? extends DefaultCanningDisplay> getCategoryIdentifier() {
+        return GalacticraftREIServerPlugin.CANNING;
     }
 
     @Override
     public Renderer getIcon() {
-        return EntryStacks.of(new ItemStack(ELECTRIC_FURNACE));
+        return EntryStacks.of(GCBlocks.FOOD_CANNER.asItem().getDefaultInstance());
     }
 
     @Override
     public Component getTitle() {
-        return Component.translatable(Translations.RecipeCategory.ELECTRIC_FURNACE);
+        return Component.translatable(Translations.RecipeCategory.CANNING);
     }
 
     @Override
-    public @NotNull List<Widget> setupDisplay(ElectricFurnaceDisplay recipeDisplay, Rectangle bounds) {
-        final Point startPoint = new Point(bounds.x + (bounds.width - REI_WIDTH) / 2 - REI_X, bounds.y - REI_Y + 5);
+    public @NotNull List<Widget> setupDisplay(DefaultCanningDisplay recipeDisplay, Rectangle bounds) {
+        final Point startPoint = new Point(bounds.x - RECIPE_VIEWER_X + 5, bounds.y - RECIPE_VIEWER_Y + 5);
+
+        List<EntryIngredient> ingredients = recipeDisplay.getInputEntries();
+        final int n = ingredients.size() - 1;
 
         List<Widget> widgets = new ArrayList<>();
         widgets.add(Widgets.createRecipeBase(bounds));
         widgets.add(Widgets.createTexturedWidget(SCREEN_TEXTURE, startPoint.x + PROGRESS_X, startPoint.y + PROGRESS_Y, PROGRESS_BACKGROUND_U, PROGRESS_BACKGROUND_V, PROGRESS_WIDTH, PROGRESS_HEIGHT));
 
-        double processingTime = recipeDisplay.getProcessingTime() * 50.0D;
-        widgets.add(new CustomArrowWidget(SCREEN_TEXTURE, new Rectangle(startPoint.x + PROGRESS_X, startPoint.y + PROGRESS_Y, PROGRESS_WIDTH, PROGRESS_HEIGHT), PROGRESS_U, PROGRESS_V, processingTime));
-        widgets.add(Widgets.createLabel(new Point(bounds.getCenterX(), bounds.y + 5),
-                Component.translatable(Translations.RecipeCategory.REI_TIME, FORMAT.format(processingTime / 1000.0D))).noShadow().centered().color(0xFF404040, 0xFFBBBBBB));
-        widgets.add(Widgets.createSlot(new Point(startPoint.x + INPUT_X, startPoint.y + INPUT_Y)).markInput().entries(recipeDisplay.getInputEntries().get(0)));
+        CanningProgressWidget progressWidget = new CanningProgressWidget(startPoint.x + PROGRESS_X, startPoint.y + PROGRESS_Y, n);
+        widgets.add(progressWidget);
 
-        final Point outputPoint = new Point(startPoint.x + OUTPUT_X, startPoint.y + OUTPUT_Y);
-        widgets.add(Widgets.createResultSlotBackground(outputPoint));
-        widgets.add(Widgets.createSlot(outputPoint).disableBackground().markOutput().entries(recipeDisplay.getOutputEntries().get(0)));
+        // Top slot
+        widgets.add(Widgets.createSlot(new Point(startPoint.x + INPUT_X, startPoint.y + INPUT_Y)).markInput().entries(ingredients.get(0)));
+
+        // Grid slots
+        for (int i = 0; i < 16; i++) {
+            Slot slot = Widgets.createSlot(new Point(startPoint.x + GRID_X + 18 * (i % 4), startPoint.y + GRID_Y + 18 * (i / 4))).markInput();
+            if (i < n) {
+                slot.entries(ingredients.get(i + 1));
+            }
+            widgets.add(slot);
+        }
+
+        // Middle slot
+        widgets.add(Widgets.createSlot(new Point(startPoint.x + CURRENT_X, startPoint.y + CURRENT_Y)).entries(
+                recipeDisplay.getOutputEntries().get(0).stream().map(
+                        entry -> ((EntryStack<ItemStack>) entry.copy()).withRenderer(progressWidget.getEntryRenderer(GCItems.CANNED_FOOD.getDefaultInstance()))
+                ).toList()
+        ));
+
+        // Bottom slot
+        widgets.add(Widgets.createSlot(new Point(startPoint.x + OUTPUT_X, startPoint.y + OUTPUT_Y)).markOutput().entries(recipeDisplay.getOutputEntries().get(0)));
+
         return widgets;
     }
 
     @Override
     public int getDisplayHeight() {
-        return REI_HEIGHT + 10;
+        return RECIPE_VIEWER_HEIGHT + 10;
+    }
+
+    @Override
+    public int getDisplayWidth(DefaultCanningDisplay display) {
+        return RECIPE_VIEWER_WIDTH + 10;
     }
 
     @Override
