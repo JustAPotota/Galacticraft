@@ -65,6 +65,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -82,13 +83,19 @@ public class LanderEntity extends AbstractLanderEntity implements Container, Sca
     protected long ticks = 0;
     private double lastDeltaY;
     protected boolean lastOnGround;
+    protected State state = State.SUMMONED;
 
     public LanderEntity(EntityType<?> entityType, Level level) {
         super(entityType, level);
+
+        this.inventory = NonNullList.withSize(3, ItemStack.EMPTY);
+        this.storage = InventoryStorage.of(this, null);
     }
 
     public LanderEntity(ServerPlayer player) {
         this(GCEntityTypes.LANDER, player.level());
+
+        this.state = State.SPAWNING;
 
         GCServerPlayer gcPlayer = GCServerPlayer.get(player);
         this.inventory = NonNullList.withSize(gcPlayer.getRocketStacks().size() + 1, ItemStack.EMPTY);
@@ -140,6 +147,10 @@ public class LanderEntity extends AbstractLanderEntity implements Container, Sca
         super.tick();
         this.ticks++;
 
+        if (this.state == State.SPAWNING && this.ticks > 40) {
+            this.state = State.FALLING;
+        }
+
         if (onGround()) {
             tickOnGround();
         } else {
@@ -165,7 +176,7 @@ public class LanderEntity extends AbstractLanderEntity implements Container, Sca
             onGroundHit();
         }
 
-        if (this.ticks < 40 && this.getY() > 150) {
+        if (this.state == State.SPAWNING && this.getY() > 150) {
             if (this.getPassengers().isEmpty()) {
                 Player player = level.getNearestPlayer(this, 5);
 
@@ -175,7 +186,7 @@ public class LanderEntity extends AbstractLanderEntity implements Container, Sca
             }
         }
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide && !this.inventory.isEmpty()) {
             ContainerItemContext context = ContainerItemContext.ofSingleSlot(InventoryStorage.of(this, null).getSlot(this.inventory.size() - 1));
             Storage<FluidVariant> fluidStorage = context.find(FluidStorage.ITEM);
             if (fluidStorage != null && !tank.isResourceBlank() && tank.getAmount() > 0) {
@@ -251,7 +262,7 @@ public class LanderEntity extends AbstractLanderEntity implements Container, Sca
                         this.getX(),
                         this.getY(),
                         this.getZ(),
-                        (int) Mth.ceil(Constant.Landing.EXPLOSION_SCALE * Math.abs(this.lastDeltaY)),
+                        Mth.ceil(Constant.Landing.EXPLOSION_SCALE * Math.abs(this.lastDeltaY)),
                         false,
                         Level.ExplosionInteraction.MOB
                 );
@@ -290,12 +301,12 @@ public class LanderEntity extends AbstractLanderEntity implements Container, Sca
             return Vec3.ZERO;
         }
 
-        if (this.ticks >= 40 && this.ticks < 45) {
-            setDeltaMovement(0, -2.5D, 0);
+        if (this.state == State.SPAWNING && this.ticks == 40) {
+            return new Vec3(0, -2.5D, 0);
         }
 
         Vec3 delta = getDeltaMovement();
-        return new Vec3(delta.x(), this.ticks < 40 ? 0 : delta.y(), delta.z());
+        return new Vec3(delta.x(), this.state == State.SPAWNING ? 0 : delta.y(), delta.z());
     }
 
     @Override
@@ -311,7 +322,7 @@ public class LanderEntity extends AbstractLanderEntity implements Container, Sca
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public @NotNull InteractionResult interact(Player player, InteractionHand hand) {
         if (this.level().isClientSide) {
             if (!this.onGround()) {
                 return InteractionResult.FAIL;
@@ -362,17 +373,17 @@ public class LanderEntity extends AbstractLanderEntity implements Container, Sca
     }
 
     @Override
-    public ItemStack getItem(int slot) {
+    public @NotNull ItemStack getItem(int slot) {
         return this.inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeItem(int slot, int amount) {
+    public @NotNull ItemStack removeItem(int slot, int amount) {
         return ContainerHelper.removeItem(this.inventory, slot, amount);
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int slot) {
+    public @NotNull ItemStack removeItemNoUpdate(int slot) {
         return ContainerHelper.takeItem(this.inventory, slot);
     }
 
@@ -420,25 +431,21 @@ public class LanderEntity extends AbstractLanderEntity implements Container, Sca
 
     @Override
     public boolean shouldMove() {
-        if (this.ticks < 40) {
-            return false;
-        }
-
-        return !this.onGround();
+        return this.state != State.SPAWNING && !this.onGround();
     }
 
     @Override
     public boolean shouldSpawnParticles() {
-        return this.ticks > 40 && getXRot() != NO_PARTICLES;
+        return this.ticks > 40 && !this.onGround();
     }
 
     @Override
-    protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float scaleFactor) {
+    protected @NotNull Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float scaleFactor) {
         return new Vec3(0, 1.5F, 0);
     }
 
     @Override
-    public Vec3 getDismountLocationForPassenger(LivingEntity passenger) {
+    public @NotNull Vec3 getDismountLocationForPassenger(LivingEntity passenger) {
         return new Vec3(getX(), getY(), getZ());
     }
 
@@ -456,7 +463,8 @@ public class LanderEntity extends AbstractLanderEntity implements Container, Sca
 
             if (jumping) {
                 var deltaM = getDeltaMovement();
-                setDeltaMovement(deltaM.x(), Math.min(deltaM.y() + 0.03F, getY() < level().getHeight(Heightmap.Types.WORLD_SURFACE, getBlockX(), getBlockZ()) + 35 ? -0.15 : -1.0), deltaM.z());
+                boolean closeToGround = getY() < level().getHeight(Heightmap.Types.WORLD_SURFACE, getBlockX(), getBlockZ()) + 35;
+                setDeltaMovement(deltaM.x(), Math.min(deltaM.y() + 0.03F, closeToGround ? -0.15 : -1.0), deltaM.z());
             }
 
             if (shiftKeyDown) {
@@ -474,5 +482,9 @@ public class LanderEntity extends AbstractLanderEntity implements Container, Sca
     @Override
     public ParachestMenu.OpeningData getScreenOpeningData(ServerPlayer player) {
         return new ParachestMenu.OpeningData(this.inventory.size());
+    }
+
+    public enum State {
+        SPAWNING, FALLING, SUMMONED
     }
 }

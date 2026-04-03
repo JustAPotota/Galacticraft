@@ -151,7 +151,6 @@ public class GCEntityTypes {
             .sized(2.5F, 4F)
             .eyeHeight(2.625F)
             .fireImmune()
-            .noSummon()
             .build());
     public static final EntityType<Buggy> BUGGY = ENTITIES.register(Entity.BUGGY, EntityType.Builder.of(Buggy::new, MobCategory.MISC)
             .clientTrackingRange(150)
