@@ -117,9 +117,12 @@ public class LanderEntity extends AbstractLanderEntity implements Container, Sca
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         tank.readNbt(tag, this.registryAccess());
-        this.inventory = NonNullList.withSize(tag.getInt("size"), ItemStack.EMPTY);
-        this.storage = InventoryStorage.of(this, null);
-        ContainerHelper.loadAllItems(tag, this.inventory, this.registryAccess());
+
+        if (tag.contains("size")) {
+            this.inventory = NonNullList.withSize(tag.getInt("size"), ItemStack.EMPTY);
+            this.storage = InventoryStorage.of(this, null);
+            ContainerHelper.loadAllItems(tag, this.inventory, this.registryAccess());
+        }
 
         this.lastDeltaY = this.getDeltaMovement().y;
     }
